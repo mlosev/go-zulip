@@ -91,13 +91,15 @@ func (z *Zulip) Register(event_types []string) string {
 
 	bytes, err := z.api("api/v1/register", "POST", v)
 	if err != nil {
-		panic(err)
+		logrus.WithError(err).Error("Unable to register for events")
+		return ""
 	}
 
 	var res RegisterResponse
 	err = json.Unmarshal(bytes, &res)
 	if err != nil {
-		panic(err)
+		logrus.WithError(err).Error("Unable to unmarshal response")
+		return ""
 	}
 
 	z.queueID = res.QueueID
@@ -111,7 +113,8 @@ func (z *Zulip) tryToGetEvents(last_event_id string) []byte {
 
 	res, err := z.api("api/v1/events", "GET", v)
 	if err != nil {
-		panic(err)
+		logrus.WithError(err).Error("Unable to get events")
+		return []byte{}
 	}
 
 	return res
@@ -124,7 +127,8 @@ func (z *Zulip) GetEvents(handler EventListener) {
 		var res EventsResponse
 		err := json.Unmarshal(bytes, &res)
 		if err != nil {
-			panic(err)
+			logrus.WithError(err).Error("Unable to unmarshal events")
+			continue
 		}
 
 		if res.Result != "success" {
