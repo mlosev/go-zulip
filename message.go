@@ -50,4 +50,3 @@ func (z *Zulip) SendMessage(msg *message) {
 
 	z.api("api/v1/messages", "POST", v)
 }
-

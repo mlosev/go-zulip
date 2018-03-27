@@ -10,42 +10,42 @@ type BaseResponse struct {
 type RegisterResponse struct {
 	BaseResponse
 	QueueID      string `json:"queue_id"`
-	MaxMessageID int64 `json:"max_message_id"`
-	LastEventID  int64 `json:"last_event_id"`
+	MaxMessageID int64  `json:"max_message_id"`
+	LastEventID  int64  `json:"last_event_id"`
 }
 
 type MessageResponse struct {
-	Content          string `json:"content"`
-	Subject          string `json:"subject"`
-	ContentType      string `json:"content_type"`
-	Client           string `json:"client"`
-	GravatarHash     string `json:"gravatar_hash"`
-	AvatarUrl        string `json:"avatar_url"`
-	ID               int64 `json:"id"`
-	SenderID         int `json:"sender_id"`
-	RecipientID      int `json:"recipient_id"`
-	SenderEmail      string `json:"sender_email"`
-	SenderDomain     string `json:"sender_domain"`
-	SenderFullName   string `json:"sender_full_name"`
-	SenderShortName  string `json:"sender_short_name"`
+	Content          string      `json:"content"`
+	Subject          string      `json:"subject"`
+	ContentType      string      `json:"content_type"`
+	Client           string      `json:"client"`
+	GravatarHash     string      `json:"gravatar_hash"`
+	AvatarUrl        string      `json:"avatar_url"`
+	ID               int64       `json:"id"`
+	SenderID         int         `json:"sender_id"`
+	RecipientID      int         `json:"recipient_id"`
+	SenderEmail      string      `json:"sender_email"`
+	SenderDomain     string      `json:"sender_domain"`
+	SenderFullName   string      `json:"sender_full_name"`
+	SenderShortName  string      `json:"sender_short_name"`
 	DisplayRecipient interface{} `json:"display_recipient"`
-	SubjectLinks     []string `json:"subject_links"`
-	Reactions        []string `json:"reactions"`
-	Mentioned        bool `json:"is_mentioned"`
-	Type             string `json:"type"`
-	Timestamp        int64 `json:"timestamp"`
+	SubjectLinks     []string    `json:"subject_links"`
+	Reactions        []string    `json:"reactions"`
+	Mentioned        bool        `json:"is_mentioned"`
+	Type             string      `json:"type"`
+	Timestamp        int64       `json:"timestamp"`
 }
 
 type EventResponse struct {
-	Flags   []string `json:"flags"`
+	Flags   []string         `json:"flags"`
 	Message *MessageResponse `json:"message"`
-	Type    string `json:"type"`
-	ID      int64 `json:"id"`
+	Type    string           `json:"type"`
+	ID      int64            `json:"id"`
 }
 
 type EventsResponse struct {
 	BaseResponse
-	QueueID string `json:"queue_id"`
+	QueueID string           `json:"queue_id"`
 	Events  []*EventResponse `json:"events"`
 }
 

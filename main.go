@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
+	"github.com/sirupsen/logrus"
 )
 
 type EventListener interface {
@@ -37,9 +37,7 @@ func (z *Zulip) tryToCallApi(url, method string, params url.Values) []byte {
 	client := &http.Client{}
 
 	url = fmt.Sprintf("%s/%s?%s", z.baseUrl, url, params.Encode())
-	if z.Debug {
-		fmt.Println(url)
-	}
+	logrus.Debug("zulip url: ", url)
 
 	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
@@ -68,21 +66,15 @@ func (z *Zulip) api(url, method string, params url.Values) (bytes []byte, err er
 		var res BaseResponse
 		err = json.Unmarshal(bytes, &res)
 		if err != nil {
-			if z.Debug {
-				fmt.Println("Failed to parse response")
-			}
+			logrus.WithError(err).Warn("Failed to parse response")
 			time.Sleep(time.Second)
 			continue
 		}
-		if z.Debug {
-			spew.Dump(res)
-		}
+		logrus.WithField("response", res).Debug("Got response")
 
 		if res.Result == "error" {
 			if strings.HasPrefix(res.Msg, "API usage exceeded rate limit") {
-				if z.Debug {
-					fmt.Println("Exceeded API rate limit, sleeping for 1 second")
-				}
+				logrus.Warn("Exceeded API rate limit, sleeping for 1 second")
 				time.Sleep(time.Second)
 				continue
 			}
