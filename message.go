@@ -12,22 +12,22 @@ const (
 	streamMessage  messageType = "stream"
 )
 
-type message struct {
+type Message struct {
 	Type                  messageType
 	Content               string
 	StreamName, TopicName string
 	Usernames             []string
 }
 
-func NewPrivateMessage(recipients []string) *message {
-	return &message{Type: privateMessage, Usernames: recipients}
+func NewPrivateMessage(recipients []string) *Message {
+	return &Message{Type: privateMessage, Usernames: recipients}
 }
 
-func NewStreamMessage(stream, topic string) *message {
-	return &message{Type: streamMessage, StreamName: stream, TopicName: topic}
+func NewStreamMessage(stream, topic string) *Message {
+	return &Message{Type: streamMessage, StreamName: stream, TopicName: topic}
 }
 
-func Reply(msg *MessageResponse) *message {
+func Reply(msg *MessageResponse) *Message {
 	if msg.IsPrivate() {
 		return NewPrivateMessage(msg.GetRecipients())
 	} else {
@@ -35,7 +35,7 @@ func Reply(msg *MessageResponse) *message {
 	}
 }
 
-func (z *Zulip) SendMessage(msg *message) {
+func (z *Zulip) SendMessage(msg *Message) {
 	v := url.Values{}
 	v.Set("type", string(msg.Type))
 	v.Set("content", msg.Content)
